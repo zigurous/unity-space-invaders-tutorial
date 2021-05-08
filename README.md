@@ -1,10 +1,10 @@
-# Project Title
+# Space Invaders
 
-> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nibh elit, iaculis id condimentum vitae, efficitur nec lorem. Nam convallis ligula vitae velit porta interdum. Donec euismod sem ligula, aliquet lacinia eros mollis molestie. Maecenas et enim mollis lacus ultrices consequat. Quisque vehicula id neque sit amet placerat. Etiam posuere vel ipsum vel tincidunt. Nulla et efficitur urna. Phasellus varius gravida velit non commodo. Vivamus sagittis commodo nibh vitae posuere.
+> Space Invaders is a 1978 shoot 'em up arcade game developed by Tomohiro Nishikado. Within the shooter game genre, Space Invaders was the first fixed shooter and set the template for the shoot 'em up genre. The goal is to defeat wave after wave of descending aliens with a horizontally moving laser to earn as many points as possible.
 
-- **Difficulty**:
-- **Topics**:
-- **Version**: Unity 2019.4.13f1
+- **Difficulty**: Intermediate
+- **Topics**: Shooting, Destruction, Enemy Logic
+- **Version**: Unity 2020.2
 - **Author**: [@adamgraham](https://github.com/adamgraham)
 - [**Tutorial Video**](https://www.youtube.com/c/zigurous)
-- [**Source Code**](https://github.com/zigurous)
+- [**Source Code**](https://github.com/zigurous/unity-space-invaders-tutorial)
