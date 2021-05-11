@@ -724,7 +724,6 @@ MonoBehaviour:
     m_RotationOrder: 4
   rows: 5
   columns: 11
-  advances: 10
   missilePrefab: {fileID: 6161936928069685931, guid: 3c328e673b90a7f418f1f1e66f83522b, type: 3}
   missileSpawnRate: 1
 --- !u!1 &1001845995

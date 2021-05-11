@@ -59,17 +59,6 @@ public class Invaders : MonoBehaviour
     public int columns = 11;
 
     /// <summary>
-    /// The number of times the invaders can advance rows.
-    /// </summary>
-    [Tooltip("The number of times the invaders can advance rows.")]
-    public int advances = 10;
-
-    /// <summary>
-    /// The current row the invaders have advanced to.
-    /// </summary>
-    private int _row;
-
-    /// <summary>
     /// The prefab that is cloned when an invader shoots a missile.
     /// </summary>
     [Tooltip("The prefab that is cloned when an invader shoots a missile.")]
@@ -187,12 +176,9 @@ public class Invaders : MonoBehaviour
         _direction.x *= -1.0f;
 
         // Move the entire grid of invaders down a row
-        if (_row++ < this.advances)
-        {
-            Vector3 position = this.transform.position;
-            position.y -= 1.0f;
-            this.transform.position = position;
-        }
+        Vector3 position = this.transform.position;
+        position.y -= 1.0f;
+        this.transform.position = position;
     }
 
     private void OnInvaderKilled(Invader invader)
@@ -213,7 +199,6 @@ public class Invaders : MonoBehaviour
         // Reset state
         this.amountKilled = 0;
         _direction = Vector3.right;
-        _row = 0;
 
         // Reset the position of the invaders back to the top
         this.transform.position = _initialPosition;

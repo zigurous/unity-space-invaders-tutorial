@@ -43,6 +43,8 @@ public class Bunker : MonoBehaviour
         // Each bunker needs a unique instance of the sprite texture since we
         // will be modifying it at the source
         CopyTexture(_originalTexture);
+
+        this.gameObject.SetActive(true);
     }
 
     private void CopyTexture(Texture2D source)
@@ -137,6 +139,13 @@ public class Bunker : MonoBehaviour
                Splat(hitPoint + (Vector3.up * offset.y)) ||
                Splat(hitPoint + (Vector3.left * offset.x)) ||
                Splat(hitPoint + (Vector3.right * offset.x));
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Invader")) {
+            this.gameObject.SetActive(false);
+        }
     }
 
 }

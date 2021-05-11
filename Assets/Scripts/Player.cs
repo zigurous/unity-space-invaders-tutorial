@@ -66,8 +66,9 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // The player is killed when hit by a missile
-        if (other.gameObject.layer == LayerMask.NameToLayer("Missile")) {
+        // The player is killed when hit by a missile or invader
+        if (other.gameObject.layer == LayerMask.NameToLayer("Missile") ||
+            other.gameObject.layer == LayerMask.NameToLayer("Invader")) {
             this.killed?.Invoke();
         }
     }

@@ -77,7 +77,7 @@ public sealed class GameManager : MonoBehaviour
     private void Update()
     {
         // Start a new game once the player presses 'Return'
-        if (this.lives == 0 && Input.GetKeyDown(KeyCode.Return)) {
+        if (this.lives <= 0 && Input.GetKeyDown(KeyCode.Return)) {
             NewGame();
         }
     }
@@ -138,7 +138,7 @@ public sealed class GameManager : MonoBehaviour
     private void SetLives(int lives)
     {
         // Set lives and update UI text
-        this.lives = lives;
+        this.lives = Mathf.Max(lives, 0);
         this.livesText.text = this.lives.ToString();
     }
 
@@ -150,10 +150,10 @@ public sealed class GameManager : MonoBehaviour
         // Temporarily disable the player game object
         this.player.gameObject.SetActive(false);
 
-        // Respawn the player after 1 second or trigger the game over state
-        // after running out of lives
+        // Start the round over again after 1 second or trigger the game over
+        // state if out of lives
         if (this.lives > 0) {
-            Invoke(nameof(Respawn), 1.0f);
+            Invoke(nameof(NewRound), 1.0f);
         } else {
             GameOver();
         }
