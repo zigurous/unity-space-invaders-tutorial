@@ -12,9 +12,9 @@ TagManager:
   - Water
   - UI
   - Player
-  - Bullet
-  - Obstacle
-  - Enemy
+  - Invader
+  - Laser
+  - Missile
   - 
   - 
   - 
