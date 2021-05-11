@@ -24,32 +24,41 @@ public class Bunker : MonoBehaviour
     /// </summary>
     private BoxCollider2D _collider;
 
+    /// <summary>
+    /// The original texture of the sprite so we can clone it.
+    /// </summary>
+    private Texture2D _originalTexture;
+
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _collider = GetComponent<BoxCollider2D>();
+        _originalTexture = _spriteRenderer.sprite.texture;
 
-        // Each bunker needs a unique instance of the sprite since we will be
-        // changing the source texture
-        CreateSpriteInstance();
+        ResetBunker();
     }
 
-    private void CreateSpriteInstance()
+    public void ResetBunker()
     {
-        Sprite sprite = _spriteRenderer.sprite;
+        // Each bunker needs a unique instance of the sprite texture since we
+        // will be modifying it at the source
+        CopyTexture(_originalTexture);
+    }
 
+    private void CopyTexture(Texture2D source)
+    {
         // Create a copy of the source texture with the same properties
-        Texture2D texture = new Texture2D(sprite.texture.width, sprite.texture.height, sprite.texture.format, false);
-        texture.filterMode = sprite.texture.filterMode;
-        texture.alphaIsTransparency = sprite.texture.alphaIsTransparency;
-        texture.anisoLevel = sprite.texture.anisoLevel;
-        texture.wrapMode = sprite.texture.wrapMode;
-        texture.SetPixels(sprite.texture.GetPixels());
-        texture.Apply();
+        Texture2D copy = new Texture2D(source.width, source.height, source.format, false);
+        copy.filterMode = source.filterMode;
+        copy.alphaIsTransparency = source.alphaIsTransparency;
+        copy.anisoLevel = source.anisoLevel;
+        copy.wrapMode = source.wrapMode;
+        copy.SetPixels(source.GetPixels());
+        copy.Apply();
 
-        // Create a new sprite using the cloned texture
-        Sprite instance = Sprite.Create(texture, sprite.rect, new Vector2(0.5f, 0.5f), sprite.pixelsPerUnit);
-        _spriteRenderer.sprite = instance;
+        // Create a new sprite using the copied texture
+        Sprite sprite = Sprite.Create(copy, _spriteRenderer.sprite.rect, new Vector2(0.5f, 0.5f), _spriteRenderer.sprite.pixelsPerUnit);
+        _spriteRenderer.sprite = sprite;
     }
 
     public bool CheckPoint(Vector3 hitPoint, out int px, out int py)

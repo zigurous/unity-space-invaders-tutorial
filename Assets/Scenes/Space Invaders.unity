@@ -245,9 +245,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 459f605e13eced949a32904be2fa0a25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1639391302}
-  invaders: {fileID: 962212320}
-  mysteryShip: {fileID: 1154390492}
   scoreText: {fileID: 1984502043}
   livesText: {fileID: 188796889}
   gameOverUI: {fileID: 797358150}

@@ -168,12 +168,12 @@ public class Invaders : MonoBehaviour
             }
 
             // Check the left edge or right edge based on the current direction
-            if (_direction.x > 0.0f && invader.position.x >= (rightEdge.x - 1.0f))
+            if (_direction == Vector3.right && invader.position.x >= (rightEdge.x - 1.0f))
             {
                 AdvanceRow();
                 break;
             }
-            else if (invader.position.x <= (leftEdge.x + 1.0f))
+            else if (_direction == Vector3.left && invader.position.x <= (leftEdge.x + 1.0f))
             {
                 AdvanceRow();
                 break;
@@ -200,14 +200,12 @@ public class Invaders : MonoBehaviour
         // Disable the invader that was killed
         invader.gameObject.SetActive(false);
 
+        // Increment the amount of invaders killed so the game manager can check
+        // if they are all dead
+        this.amountKilled++;
+
         // Invoke the kill callback
         this.killed(invader);
-
-        // Increment the amount of invaders that have been killed and reset all
-        // of them after they have all been killed
-        if (++this.amountKilled >= this.totalAmount) {
-            ResetInvaders();
-        }
     }
 
     public void ResetInvaders()

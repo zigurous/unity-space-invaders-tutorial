@@ -10,20 +10,22 @@ public sealed class GameManager : MonoBehaviour
     /// <summary>
     /// A reference to the player game object.
     /// </summary>
-    [Tooltip("A reference to the player game object.")]
-    public Player player;
+    private Player player;
 
     /// <summary>
     /// A reference to the invaders game object.
     /// </summary>
-    [Tooltip("A reference to the invaders game object.")]
-    public Invaders invaders;
+    private Invaders invaders;
 
     /// <summary>
     /// A reference to the MysteryShip game object.
     /// </summary>
-    [Tooltip("A reference to the MysteryShip game object.")]
-    public MysteryShip mysteryShip;
+    private MysteryShip mysteryShip;
+
+    /// <summary>
+    /// A reference to all of the bunker game objects.
+    /// </summary>
+    private Bunker[] bunkers;
 
     /// <summary>
     /// The UI text that displays the player's score.
@@ -53,6 +55,14 @@ public sealed class GameManager : MonoBehaviour
     /// </summary>
     public int lives { get; private set; }
 
+    private void Awake()
+    {
+        this.player = FindObjectOfType<Player>();
+        this.invaders = FindObjectOfType<Invaders>();
+        this.mysteryShip = FindObjectOfType<MysteryShip>();
+        this.bunkers = FindObjectsOfType<Bunker>();
+    }
+
     private void Start()
     {
         // Register callbacks for game state
@@ -74,26 +84,30 @@ public sealed class GameManager : MonoBehaviour
 
     private void NewGame()
     {
+        // Hide the game over UI
+        this.gameOverUI.SetActive(false);
+
         // Reset score and lives
         SetScore(0);
         SetLives(3);
 
+        // Start the first round
+        NewRound();
+    }
+
+    private void NewRound()
+    {
         // Reset all of the invaders
         this.invaders.ResetInvaders();
         this.invaders.gameObject.SetActive(true);
 
-        // Hide the game over UI
-        this.gameOverUI.SetActive(false);
+        // Reset all of the bunkers
+        for (int i = 0; i < this.bunkers.Length; i++) {
+            this.bunkers[i].ResetBunker();
+        }
 
         // Spawn the player
         Respawn();
-    }
-
-    private void GameOver()
-    {
-        // Show the game over UI and hide the invaders
-        this.gameOverUI.SetActive(true);
-        this.invaders.gameObject.SetActive(false);
     }
 
     private void Respawn()
@@ -105,6 +119,13 @@ public sealed class GameManager : MonoBehaviour
 
         // Re-enable the player game object
         this.player.gameObject.SetActive(true);
+    }
+
+    private void GameOver()
+    {
+        // Show the game over UI and hide the invaders
+        this.gameOverUI.SetActive(true);
+        this.invaders.gameObject.SetActive(false);
     }
 
     private void SetScore(int score)
@@ -142,6 +163,11 @@ public sealed class GameManager : MonoBehaviour
     {
         // Increment score by how much the invader is worth
         SetScore(this.score + invader.score);
+
+        // Start a new round after all invaders have been killed
+        if (this.invaders.amountKilled == this.invaders.totalAmount) {
+            NewRound();
+        }
     }
 
     private void OnMysteryShipKilled(MysteryShip mysteryShip)
