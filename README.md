@@ -6,5 +6,5 @@
 - **Topics**: Shooting, Destruction, Sprites
 - **Version**: Unity 2020.2
 - **Author**: [@adamgraham](https://github.com/adamgraham)
-- [**Tutorial Video**](https://www.youtube.com/c/zigurous)
+- [**Tutorial Video**](https://youtu.be/qWDQgmdUzWI)
 - [**Source Code**](https://github.com/zigurous/unity-space-invaders-tutorial)
