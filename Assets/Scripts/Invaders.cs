@@ -23,7 +23,7 @@ public class Invaders : MonoBehaviour
     /// <summary>
     /// The direction the invaders are moving.
     /// </summary>
-    private Vector3 _direction = Vector3.right;
+    public Vector3 direction { get; private set; } = Vector3.right;
 
     /// <summary>
     /// The initial position of the invaders so they can be reset.
@@ -38,12 +38,22 @@ public class Invaders : MonoBehaviour
     /// <summary>
     /// The amount of invaders that have been killed.
     /// </summary>
-    public int amountKilled { get; private set; }
+    public int AmountKilled { get; private set; }
+
+    /// <summary>
+    /// The amount of invaders that are still alive.
+    /// </summary>
+    public int AmountAlive => this.TotalAmount - this.AmountKilled;
 
     /// <summary>
     /// The total amount of invaders (dead or alive).
     /// </summary>
-    public int totalAmount => this.rows * this.columns;
+    public int TotalAmount => this.rows * this.columns;
+
+    /// <summary>
+    /// The percentage of invaders that have been killed.
+    /// </summary>
+    public float PercentKilled => (float)this.AmountKilled / (float)this.TotalAmount;
 
     /// <summary>
     /// The number of rows of invaders.
@@ -107,17 +117,15 @@ public class Invaders : MonoBehaviour
 
     private void MissileAttack()
     {
-        int aliveInvaders = this.totalAmount - this.amountKilled;
+        int amountAlive = this.AmountAlive;
 
         // No missiles should spawn when no invaders are alive
-        if (aliveInvaders == 0) {
+        if (amountAlive == 0) {
             return;
         }
 
-        for (int i = 0; i < this.transform.childCount; i++)
+        foreach (Transform invader in this.transform)
         {
-            Transform invader = this.transform.GetChild(i);
-
             // Any invaders that are killed cannot shoot missiles
             if (!invader.gameObject.activeInHierarchy) {
                 continue;
@@ -125,7 +133,7 @@ public class Invaders : MonoBehaviour
 
             // Random chance to spawn a missile based upon how many invaders are
             // alive (the more invaders alive the lower the chance)
-            if (Random.value < (1.0f / (float)aliveInvaders))
+            if (Random.value < (1.0f / (float)amountAlive))
             {
                 Instantiate(this.missilePrefab, invader.position, Quaternion.identity);
                 break;
@@ -136,11 +144,10 @@ public class Invaders : MonoBehaviour
     private void Update()
     {
         // Evaluate the speed of the invaders based on how many have been killed
-        int totalInvaders = this.columns * this.rows;
-        float speed = this.speed.Evaluate((float)this.amountKilled / (float)this.totalAmount);
+        float speed = this.speed.Evaluate(this.PercentKilled);
 
         // Move all of the invaders in the current direction
-        this.transform.position += _direction * speed * Time.deltaTime;
+        this.transform.position += this.direction * speed * Time.deltaTime;
 
         // Transform the viewport to world coordinates so we can check when the
         // invaders reach the edge of the screen
@@ -157,12 +164,12 @@ public class Invaders : MonoBehaviour
             }
 
             // Check the left edge or right edge based on the current direction
-            if (_direction == Vector3.right && invader.position.x >= (rightEdge.x - 1.0f))
+            if (this.direction == Vector3.right && invader.position.x >= (rightEdge.x - 1.0f))
             {
                 AdvanceRow();
                 break;
             }
-            else if (_direction == Vector3.left && invader.position.x <= (leftEdge.x + 1.0f))
+            else if (this.direction == Vector3.left && invader.position.x <= (leftEdge.x + 1.0f))
             {
                 AdvanceRow();
                 break;
@@ -173,7 +180,7 @@ public class Invaders : MonoBehaviour
     private void AdvanceRow()
     {
         // Flip the direction the invaders are moving
-        _direction.x *= -1.0f;
+        this.direction = new Vector3(-this.direction.x, 0.0f, 0.0f);
 
         // Move the entire grid of invaders down a row
         Vector3 position = this.transform.position;
@@ -188,7 +195,7 @@ public class Invaders : MonoBehaviour
 
         // Increment the amount of invaders killed so the game manager can check
         // if they are all dead
-        this.amountKilled++;
+        this.AmountKilled++;
 
         // Invoke the kill callback
         this.killed(invader);
@@ -197,8 +204,8 @@ public class Invaders : MonoBehaviour
     public void ResetInvaders()
     {
         // Reset state
-        this.amountKilled = 0;
-        _direction = Vector3.right;
+        this.AmountKilled = 0;
+        this.direction = Vector3.right;
 
         // Reset the position of the invaders back to the top
         this.transform.position = _initialPosition;

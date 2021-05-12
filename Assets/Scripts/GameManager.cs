@@ -165,7 +165,7 @@ public sealed class GameManager : MonoBehaviour
         SetScore(this.score + invader.score);
 
         // Start a new round after all invaders have been killed
-        if (this.invaders.amountKilled == this.invaders.totalAmount) {
+        if (this.invaders.AmountKilled == this.invaders.TotalAmount) {
             NewRound();
         }
     }
