@@ -52,7 +52,6 @@ public class Bunker : MonoBehaviour
         // Create a copy of the source texture with the same properties
         Texture2D copy = new Texture2D(source.width, source.height, source.format, false);
         copy.filterMode = source.filterMode;
-        copy.alphaIsTransparency = source.alphaIsTransparency;
         copy.anisoLevel = source.anisoLevel;
         copy.wrapMode = source.wrapMode;
         copy.SetPixels(source.GetPixels());
