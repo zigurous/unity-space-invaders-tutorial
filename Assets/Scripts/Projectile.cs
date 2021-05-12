@@ -33,6 +33,11 @@ public class Projectile : MonoBehaviour
         _collider = GetComponent<BoxCollider2D>();
     }
 
+    private void OnDestroy()
+    {
+        this.destroyed?.Invoke(this);
+    }
+
     private void Update()
     {
         // Move the projectile in the given direction by its speed
@@ -47,9 +52,7 @@ public class Projectile : MonoBehaviour
 
         // The projectile is destroyed when colliding with any object other than
         // a bunker or when it splats on a bunker
-        if (bunker == null || bunker.CheckCollision(_collider, this.transform.position))
-        {
-            this.destroyed?.Invoke(this);
+        if (bunker == null || bunker.CheckCollision(_collider, this.transform.position)) {
             Destroy(this.gameObject);
         }
     }
