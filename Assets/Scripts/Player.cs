@@ -30,12 +30,22 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        Vector3 position = this.transform.position;
+
         // Check for input to move the player either left or right
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) {
-            this.transform.position += Vector3.left * this.speed * Time.deltaTime;
+            position.x -= this.speed * Time.deltaTime;
         } else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) {
-            this.transform.position += Vector3.right * this.speed * Time.deltaTime;
+            position.x += this.speed * Time.deltaTime;
         }
+
+        // Clamp the position of the character so they do not go out of bounds
+        Vector3 leftEdge = Camera.main.ViewportToWorldPoint(Vector3.zero);
+        Vector3 rightEdge = Camera.main.ViewportToWorldPoint(Vector3.right);
+        position.x = Mathf.Clamp(position.x, leftEdge.x, rightEdge.x);
+
+        // Set the updated position of the player
+        this.transform.position = position;
 
         // Check for input to shoot a laser
         if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) {
