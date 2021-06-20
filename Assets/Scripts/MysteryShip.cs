@@ -32,23 +32,23 @@ public class MysteryShip : MonoBehaviour
     /// The destination point of the mystery ship on the left edge of the
     /// screen.
     /// </summary>
-    private Vector3 _leftDestination;
+    public Vector3 leftDestination { get; private set; }
 
     /// <summary>
     /// The destination point of the mystery ship on the right edge of the
     /// screen.
     /// </summary>
-    private Vector3 _rightDestination;
+    public Vector3 rightDestination { get; private set; }
 
     /// <summary>
     /// The direction the mystery ship is traveling, 1=right, -1=left.
     /// </summary>
-    private int _direction = -1;
+    public int direction { get; private set; } = -1;
 
     /// <summary>
     /// Whether the mystery ship is currently spawned.
     /// </summary>
-    private bool _spawned;
+    public bool spawned { get; private set; }
 
     private void Start()
     {
@@ -57,14 +57,17 @@ public class MysteryShip : MonoBehaviour
         Vector3 leftEdge = Camera.main.ViewportToWorldPoint(Vector3.zero);
         Vector3 rightEdge = Camera.main.ViewportToWorldPoint(Vector3.right);
 
-        _leftDestination = this.transform.position;
-        _leftDestination.x = leftEdge.x - 1.0f;
+        // Offset the destination by a unit so the ship is fully out of sight
+        Vector3 left = this.transform.position;
+        left.x = leftEdge.x - 1.0f;
+        this.leftDestination = left;
 
-        _rightDestination = this.transform.position;
-        _rightDestination.x = rightEdge.x + 1.0f;
+        Vector3 right = this.transform.position;
+        right.x = rightEdge.x + 1.0f;
+        this.rightDestination = right;
 
-        // Position the mystery ship initially on the left side of the screen
-        this.transform.position = _leftDestination;
+        // Start on the left side of the screen
+        this.transform.position = this.leftDestination;
 
         // Make sure the mystery ship is initially despawned. This will also
         // start the spawn cycle timer.
@@ -74,30 +77,30 @@ public class MysteryShip : MonoBehaviour
     private void Spawn()
     {
         // Flip the direction so it moves the opposite way each time it spawns
-        _direction *= -1;
+        this.direction *= -1;
 
         // Set the spawn point opposite side of the destination
-        if (_direction == 1) {
-            this.transform.position = _leftDestination;
+        if (this.direction == 1) {
+            this.transform.position = this.leftDestination;
         } else {
-            this.transform.position = _rightDestination;
+            this.transform.position = this.rightDestination;
         }
 
         // Mark as spawned so it starts moving
-        _spawned = true;
+        this.spawned = true;
     }
 
     private void Despawn()
     {
         // Mark as despawned so it stops moving
-        _spawned = false;
+        this.spawned = false;
 
         // Move the mystery ship to the destination point so it is hidden off
         // the screen
-        if (_direction == 1) {
-            this.transform.position = _rightDestination;
+        if (this.direction == 1) {
+            this.transform.position = this.rightDestination;
         } else {
-            this.transform.position = _leftDestination;
+            this.transform.position = this.leftDestination;
         }
 
         // Start the timer again to respawn the mystery ship
@@ -107,17 +110,17 @@ public class MysteryShip : MonoBehaviour
     private void Update()
     {
         // Do not do anything if the mystery ship is not moving
-        if (!_spawned) {
+        if (!this.spawned) {
             return;
         }
 
-        if (_direction == 1)
+        if (this.direction == 1)
         {
             // Move the mystery ship to the right based on its speed
             this.transform.position += Vector3.right * this.speed * Time.deltaTime;
 
             // Despawn the mystery ship once it exceeds the right screen edge
-            if (this.transform.position.x >= _rightDestination.x) {
+            if (this.transform.position.x >= this.rightDestination.x) {
                 Despawn();
             }
         }
@@ -127,7 +130,7 @@ public class MysteryShip : MonoBehaviour
             this.transform.position += Vector3.left * this.speed * Time.deltaTime;
 
             // Despawn the mystery ship once it exceeds the left screen edge
-            if (this.transform.position.x <= _leftDestination.x) {
+            if (this.transform.position.x <= this.leftDestination.x) {
                 Despawn();
             }
         }
@@ -135,8 +138,6 @@ public class MysteryShip : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // The mystery ship despawns when hit by a laser and the callback is
-        // invoked so score can be increased
         if (other.gameObject.layer == LayerMask.NameToLayer("Laser"))
         {
             Despawn();

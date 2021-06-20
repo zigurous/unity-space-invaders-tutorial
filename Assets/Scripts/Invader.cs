@@ -9,7 +9,7 @@ public class Invader : MonoBehaviour
     /// <summary>
     /// The sprite renderer component of the invader.
     /// </summary>
-    private SpriteRenderer _spriteRenderer;
+    public SpriteRenderer spriteRenderer { get; private set; }
 
     /// <summary>
     /// The sprites that are animated on the invader.
@@ -26,7 +26,7 @@ public class Invader : MonoBehaviour
     /// <summary>
     /// The index of the current sprite being rendered.
     /// </summary>
-    private int _animationFrame;
+    public int animationFrame { get; private set; }
 
     /// <summary>
     /// The amount of points the invader is worth when killed.
@@ -41,34 +41,29 @@ public class Invader : MonoBehaviour
 
     private void Awake()
     {
-        // Get a reference to the sprite renderer so we can animate the sprite
-        _spriteRenderer = GetComponent<SpriteRenderer>();
-        _spriteRenderer.sprite = this.animationSprites[0];
+        this.spriteRenderer = GetComponent<SpriteRenderer>();
+        this.spriteRenderer.sprite = this.animationSprites[0];
     }
 
     private void Start()
     {
-        // Start an animation loop to cycle between sprites
         InvokeRepeating(nameof(AnimateSprite), this.animationTime, this.animationTime);
     }
 
     private void AnimateSprite()
     {
-        // Move to the next animation frame
-        _animationFrame++;
+        this.animationFrame++;
 
         // Loop back to the start if the animation frame exceeds the length
-        if (_animationFrame >= this.animationSprites.Length) {
-            _animationFrame = 0;
+        if (this.animationFrame >= this.animationSprites.Length) {
+            this.animationFrame = 0;
         }
 
-        // Set the sprite based on the current animation frame
-        _spriteRenderer.sprite = this.animationSprites[_animationFrame];
+        this.spriteRenderer.sprite = this.animationSprites[this.animationFrame];
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // The invader dies when hit by the laser
         if (other.gameObject.layer == LayerMask.NameToLayer("Laser")) {
             this.killed?.Invoke(this);
         }

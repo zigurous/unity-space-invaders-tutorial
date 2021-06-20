@@ -26,7 +26,7 @@ public class Player : MonoBehaviour
     /// Whether a laser shot is currently active so we can ensure only one laser
     /// is active at a given time.
     /// </summary>
-    private bool _laserActive;
+    public bool laserActive { get; private set; }
 
     private void Update()
     {
@@ -35,7 +35,8 @@ public class Player : MonoBehaviour
         // Check for input to move the player either left or right
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) {
             position.x -= this.speed * Time.deltaTime;
-        } else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) {
+        }
+        else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) {
             position.x += this.speed * Time.deltaTime;
         }
 
@@ -43,11 +44,8 @@ public class Player : MonoBehaviour
         Vector3 leftEdge = Camera.main.ViewportToWorldPoint(Vector3.zero);
         Vector3 rightEdge = Camera.main.ViewportToWorldPoint(Vector3.right);
         position.x = Mathf.Clamp(position.x, leftEdge.x, rightEdge.x);
-
-        // Set the updated position of the player
         this.transform.position = position;
 
-        // Check for input to shoot a laser
         if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) {
             Shoot();
         }
@@ -57,12 +55,10 @@ public class Player : MonoBehaviour
     {
         // Only one laser can be active at a given time so first check that
         // there is not already an active laser
-        if (!_laserActive)
+        if (!this.laserActive)
         {
-            _laserActive = true;
+            this.laserActive = true;
 
-            // Create a new laser projectile and register a callback so we know
-            // when it is destroyed
             Projectile laser = Instantiate(this.laserPrefab, this.transform.position, Quaternion.identity);
             laser.destroyed += OnLaserDestroyed;
         }
@@ -70,13 +66,12 @@ public class Player : MonoBehaviour
 
     private void OnLaserDestroyed(Projectile laser)
     {
-        // Deactivate the laser so we can fire again
-        _laserActive = false;
+        // Once the laser is destroyed we can shoot again
+        this.laserActive = false;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // The player is killed when hit by a missile or invader
         if (other.gameObject.layer == LayerMask.NameToLayer("Missile") ||
             other.gameObject.layer == LayerMask.NameToLayer("Invader")) {
             this.killed?.Invoke();

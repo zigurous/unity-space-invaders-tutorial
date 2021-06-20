@@ -17,23 +17,23 @@ public class Bunker : MonoBehaviour
     /// <summary>
     /// The sprite renderer component of the bunker.
     /// </summary>
-    private SpriteRenderer _spriteRenderer;
+    public SpriteRenderer spriteRenderer { get; private set; }
 
     /// <summary>
     /// The box collider component of the bunker.
     /// </summary>
-    private BoxCollider2D _collider;
+    public new BoxCollider2D collider { get; private set; }
 
     /// <summary>
     /// The original texture of the sprite so we can clone it.
     /// </summary>
-    private Texture2D _originalTexture;
+    public Texture2D originalTexture { get; private set; }
 
     private void Awake()
     {
-        _spriteRenderer = GetComponent<SpriteRenderer>();
-        _collider = GetComponent<BoxCollider2D>();
-        _originalTexture = _spriteRenderer.sprite.texture;
+        this.spriteRenderer = GetComponent<SpriteRenderer>();
+        this.collider = GetComponent<BoxCollider2D>();
+        this.originalTexture = this.spriteRenderer.sprite.texture;
 
         ResetBunker();
     }
@@ -42,7 +42,7 @@ public class Bunker : MonoBehaviour
     {
         // Each bunker needs a unique instance of the sprite texture since we
         // will be modifying it at the source
-        CopyTexture(_originalTexture);
+        CopyTexture(this.originalTexture);
 
         this.gameObject.SetActive(true);
     }
@@ -58,8 +58,8 @@ public class Bunker : MonoBehaviour
         copy.Apply();
 
         // Create a new sprite using the copied texture
-        Sprite sprite = Sprite.Create(copy, _spriteRenderer.sprite.rect, new Vector2(0.5f, 0.5f), _spriteRenderer.sprite.pixelsPerUnit);
-        _spriteRenderer.sprite = sprite;
+        Sprite sprite = Sprite.Create(copy, this.spriteRenderer.sprite.rect, new Vector2(0.5f, 0.5f), this.spriteRenderer.sprite.pixelsPerUnit);
+        this.spriteRenderer.sprite = sprite;
     }
 
     public bool CheckPoint(Vector3 hitPoint, out int px, out int py)
@@ -69,14 +69,14 @@ public class Bunker : MonoBehaviour
 
         // Offset the point to the corner of the object instead of the center so
         // we can transform to uv coordinates
-        localPoint.x += _collider.size.x / 2;
-        localPoint.y += _collider.size.y / 2;
+        localPoint.x += this.collider.size.x / 2;
+        localPoint.y += this.collider.size.y / 2;
 
-        Texture2D texture = _spriteRenderer.sprite.texture;
+        Texture2D texture = this.spriteRenderer.sprite.texture;
 
         // Transform the point from local space to uv coordinates
-        px = (int)((localPoint.x / _collider.size.x) * texture.width);
-        py = (int)((localPoint.y / _collider.size.y) * texture.height);
+        px = (int)((localPoint.x / this.collider.size.x) * texture.width);
+        py = (int)((localPoint.y / this.collider.size.y) * texture.height);
 
         // Return true if the pixel is not empty (not transparent)
         return texture.GetPixel(px, py).a != 0.0f;
@@ -92,7 +92,7 @@ public class Bunker : MonoBehaviour
             return false;
         }
 
-        Texture2D texture = _spriteRenderer.sprite.texture;
+        Texture2D texture = this.spriteRenderer.sprite.texture;
 
         // Offset the point by half the size of the splat texture so the splat
         // is centered around the hit point
@@ -121,7 +121,6 @@ public class Bunker : MonoBehaviour
             py++;
         }
 
-        // Apply any changes made to the texture
         texture.Apply();
 
         return true;

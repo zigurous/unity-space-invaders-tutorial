@@ -28,7 +28,7 @@ public class Invaders : MonoBehaviour
     /// <summary>
     /// The initial position of the invaders so they can be reset.
     /// </summary>
-    private Vector3 _initialPosition;
+    public Vector3 initialPosition { get; private set; }
 
     /// <summary>
     /// The callback invoked when an invader is killed.
@@ -83,8 +83,7 @@ public class Invaders : MonoBehaviour
 
     private void Awake()
     {
-        // Store the initial position so we can reset after each round
-        _initialPosition = this.transform.position;
+        this.initialPosition = this.transform.position;
 
         // Form the grid of invaders
         for (int i = 0; i < this.rows; i++)
@@ -111,7 +110,6 @@ public class Invaders : MonoBehaviour
 
     private void Start()
     {
-        // Invoke a missile attack every given amount of seconds
         InvokeRepeating(nameof(MissileAttack), this.missileSpawnRate, this.missileSpawnRate);
     }
 
@@ -145,8 +143,6 @@ public class Invaders : MonoBehaviour
     {
         // Evaluate the speed of the invaders based on how many have been killed
         float speed = this.speed.Evaluate(this.PercentKilled);
-
-        // Move all of the invaders in the current direction
         this.transform.position += this.direction * speed * Time.deltaTime;
 
         // Transform the viewport to world coordinates so we can check when the
@@ -190,27 +186,18 @@ public class Invaders : MonoBehaviour
 
     private void OnInvaderKilled(Invader invader)
     {
-        // Disable the invader that was killed
         invader.gameObject.SetActive(false);
 
-        // Increment the amount of invaders killed so the game manager can check
-        // if they are all dead
         this.AmountKilled++;
-
-        // Invoke the kill callback
         this.killed(invader);
     }
 
     public void ResetInvaders()
     {
-        // Reset state
         this.AmountKilled = 0;
         this.direction = Vector3.right;
+        this.transform.position = this.initialPosition;
 
-        // Reset the position of the invaders back to the top
-        this.transform.position = _initialPosition;
-
-        // Re-enable all of the invaders that were killed
         foreach (Transform invader in this.transform) {
             invader.gameObject.SetActive(true);
         }
