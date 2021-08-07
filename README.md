@@ -4,7 +4,7 @@
 
 - **Difficulty**: Intermediate
 - **Topics**: Sprites, Shooting, Destruction
-- **Version**: Unity 2020.2
+- **Version**: Unity 2019.4 LTS
 - **Author**: [@adamgraham](https://github.com/adamgraham)
 - [**Tutorial Video**](https://youtu.be/qWDQgmdUzWI)
 - [**Source Code**](https://github.com/zigurous/unity-space-invaders-tutorial)
