@@ -1,58 +1,18 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>
-/// Manages the overall state of the game, including starting a new game and
-/// handling scoring and lives.
-/// </summary>
 public sealed class GameManager : MonoBehaviour
 {
-    /// <summary>
-    /// A reference to the player game object.
-    /// </summary>
     private Player player;
-
-    /// <summary>
-    /// A reference to the invaders game object.
-    /// </summary>
     private Invaders invaders;
-
-    /// <summary>
-    /// A reference to the MysteryShip game object.
-    /// </summary>
     private MysteryShip mysteryShip;
-
-    /// <summary>
-    /// A reference to all of the bunker game objects.
-    /// </summary>
     private Bunker[] bunkers;
 
-    /// <summary>
-    /// The UI text that displays the player's score.
-    /// </summary>
-    [Tooltip("The UI text that displays the player's score.")]
+    public GameObject gameOverUI;
     public Text scoreText;
-
-    /// <summary>
-    /// The UI text that displays the player's lives.
-    /// </summary>
-    [Tooltip("The UI text that displays the player's lives.")]
     public Text livesText;
 
-    /// <summary>
-    /// The UI displayed during the game over state.
-    /// </summary>
-    [Tooltip("The UI displayed during the game over state.")]
-    public GameObject gameOverUI;
-
-    /// <summary>
-    /// The player's current score.
-    /// </summary>
     public int score { get; private set; }
-
-    /// <summary>
-    /// The player's current lives.
-    /// </summary>
     public int lives { get; private set; }
 
     private void Awake()

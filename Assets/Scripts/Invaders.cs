@@ -1,84 +1,25 @@
 using UnityEngine;
 
-/// <summary>
-/// Handles all invader creation, movement, and missile attacks.
-/// </summary>
 public class Invaders : MonoBehaviour
 {
-    /// <summary>
-    /// The prefab that is cloned for each row of invaders.
-    /// </summary>
-    [Tooltip("The prefab that is cloned for each row of invaders.")]
     [Header("Invaders")]
     public Invader[] prefabs = new Invader[5];
-
-    /// <summary>
-    /// The speed at which the invaders move (y-axis) relative to the percentage
-    /// of invaders killed (x-axis). Typically the invaders move faster the less
-    /// there are alive.
-    /// </summary>
-    [Tooltip("The speed at which the invaders move (y-axis) relative to the percentage of invaders killed (x-axis). Typically the invaders move faster the less there are alive.")]
     public AnimationCurve speed = new AnimationCurve();
-
-    /// <summary>
-    /// The direction the invaders are moving.
-    /// </summary>
     public Vector3 direction { get; private set; } = Vector3.right;
-
-    /// <summary>
-    /// The initial position of the invaders so they can be reset.
-    /// </summary>
     public Vector3 initialPosition { get; private set; }
-
-    /// <summary>
-    /// The callback invoked when an invader is killed.
-    /// </summary>
     public System.Action<Invader> killed;
 
-    /// <summary>
-    /// The amount of invaders that have been killed.
-    /// </summary>
     public int AmountKilled { get; private set; }
-
-    /// <summary>
-    /// The amount of invaders that are still alive.
-    /// </summary>
     public int AmountAlive => this.TotalAmount - this.AmountKilled;
-
-    /// <summary>
-    /// The total amount of invaders (dead or alive).
-    /// </summary>
     public int TotalAmount => this.rows * this.columns;
-
-    /// <summary>
-    /// The percentage of invaders that have been killed.
-    /// </summary>
     public float PercentKilled => (float)this.AmountKilled / (float)this.TotalAmount;
 
-    /// <summary>
-    /// The number of rows of invaders.
-    /// </summary>
-    [Tooltip("The number of rows of invaders.")]
     [Header("Grid")]
     public int rows = 5;
-
-    /// <summary>
-    /// The number of columns of invaders.
-    /// </summary>
-    [Tooltip("The number of columns of invaders.")]
     public int columns = 11;
 
-    /// <summary>
-    /// The prefab that is cloned when an invader shoots a missile.
-    /// </summary>
-    [Tooltip("The prefab that is cloned when an invader shoots a missile.")]
     [Header("Missiles")]
     public Projectile missilePrefab;
-
-    /// <summary>
-    /// The amount of seconds between missile attacks.
-    /// </summary>
-    [Tooltip("The amount of seconds between missile attacks.")]
     public float missileSpawnRate = 1.0f;
 
     private void Awake()

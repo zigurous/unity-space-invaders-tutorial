@@ -1,33 +1,13 @@
 using UnityEngine;
 
-/// <summary>
-/// Handle bunker destruction simulations.
-/// </summary>
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(BoxCollider2D))]
 public class Bunker : MonoBehaviour
 {
-    /// <summary>
-    /// The texture that will be used as an alpha mask when a projectile splats
-    /// on the bunker.
-    /// </summary>
-    [Tooltip("The texture that will be used as an alpha mask when a projectile splats on the bunker.")]
     public Texture2D splat;
-
-    /// <summary>
-    /// The sprite renderer component of the bunker.
-    /// </summary>
-    public SpriteRenderer spriteRenderer { get; private set; }
-
-    /// <summary>
-    /// The box collider component of the bunker.
-    /// </summary>
-    public new BoxCollider2D collider { get; private set; }
-
-    /// <summary>
-    /// The original texture of the sprite so we can clone it.
-    /// </summary>
     public Texture2D originalTexture { get; private set; }
+    public SpriteRenderer spriteRenderer { get; private set; }
+    public new BoxCollider2D collider { get; private set; }
 
     private void Awake()
     {
@@ -49,7 +29,6 @@ public class Bunker : MonoBehaviour
 
     private void CopyTexture(Texture2D source)
     {
-        // Create a copy of the source texture with the same properties
         Texture2D copy = new Texture2D(source.width, source.height, source.format, false);
         copy.filterMode = source.filterMode;
         copy.anisoLevel = source.anisoLevel;
@@ -57,7 +36,6 @@ public class Bunker : MonoBehaviour
         copy.SetPixels(source.GetPixels());
         copy.Apply();
 
-        // Create a new sprite using the copied texture
         Sprite sprite = Sprite.Create(copy, this.spriteRenderer.sprite.rect, new Vector2(0.5f, 0.5f), this.spriteRenderer.sprite.pixelsPerUnit);
         this.spriteRenderer.sprite = sprite;
     }
