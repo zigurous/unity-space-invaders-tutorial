@@ -17,31 +17,31 @@ public sealed class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        this.player = FindObjectOfType<Player>();
-        this.invaders = FindObjectOfType<Invaders>();
-        this.mysteryShip = FindObjectOfType<MysteryShip>();
-        this.bunkers = FindObjectsOfType<Bunker>();
+        player = FindObjectOfType<Player>();
+        invaders = FindObjectOfType<Invaders>();
+        mysteryShip = FindObjectOfType<MysteryShip>();
+        bunkers = FindObjectsOfType<Bunker>();
     }
 
     private void Start()
     {
-        this.player.killed += OnPlayerKilled;
-        this.mysteryShip.killed += OnMysteryShipKilled;
-        this.invaders.killed += OnInvaderKilled;
+        player.killed += OnPlayerKilled;
+        mysteryShip.killed += OnMysteryShipKilled;
+        invaders.killed += OnInvaderKilled;
 
         NewGame();
     }
 
     private void Update()
     {
-        if (this.lives <= 0 && Input.GetKeyDown(KeyCode.Return)) {
+        if (lives <= 0 && Input.GetKeyDown(KeyCode.Return)) {
             NewGame();
         }
     }
 
     private void NewGame()
     {
-        this.gameOverUI.SetActive(false);
+        gameOverUI.SetActive(false);
 
         SetScore(0);
         SetLives(3);
@@ -50,11 +50,11 @@ public sealed class GameManager : MonoBehaviour
 
     private void NewRound()
     {
-        this.invaders.ResetInvaders();
-        this.invaders.gameObject.SetActive(true);
+        invaders.ResetInvaders();
+        invaders.gameObject.SetActive(true);
 
-        for (int i = 0; i < this.bunkers.Length; i++) {
-            this.bunkers[i].ResetBunker();
+        for (int i = 0; i < bunkers.Length; i++) {
+            bunkers[i].ResetBunker();
         }
 
         Respawn();
@@ -62,37 +62,37 @@ public sealed class GameManager : MonoBehaviour
 
     private void Respawn()
     {
-        Vector3 position = this.player.transform.position;
+        Vector3 position = player.transform.position;
         position.x = 0.0f;
-        this.player.transform.position = position;
-        this.player.gameObject.SetActive(true);
+        player.transform.position = position;
+        player.gameObject.SetActive(true);
     }
 
     private void GameOver()
     {
-        this.gameOverUI.SetActive(true);
-        this.invaders.gameObject.SetActive(false);
+        gameOverUI.SetActive(true);
+        invaders.gameObject.SetActive(false);
     }
 
     private void SetScore(int score)
     {
         this.score = score;
-        this.scoreText.text = this.score.ToString().PadLeft(4, '0');
+        scoreText.text = score.ToString().PadLeft(4, '0');
     }
 
     private void SetLives(int lives)
     {
         this.lives = Mathf.Max(lives, 0);
-        this.livesText.text = this.lives.ToString();
+        livesText.text = lives.ToString();
     }
 
     private void OnPlayerKilled()
     {
-        SetLives(this.lives - 1);
+        SetLives(lives - 1);
 
-        this.player.gameObject.SetActive(false);
+        player.gameObject.SetActive(false);
 
-        if (this.lives > 0) {
+        if (lives > 0) {
             Invoke(nameof(NewRound), 1.0f);
         } else {
             GameOver();
@@ -101,16 +101,16 @@ public sealed class GameManager : MonoBehaviour
 
     private void OnInvaderKilled(Invader invader)
     {
-        SetScore(this.score + invader.score);
+        SetScore(score + invader.score);
 
-        if (this.invaders.AmountKilled == this.invaders.TotalAmount) {
+        if (invaders.AmountKilled == invaders.TotalAmount) {
             NewRound();
         }
     }
 
     private void OnMysteryShipKilled(MysteryShip mysteryShip)
     {
-        SetScore(this.score + mysteryShip.score);
+        SetScore(score + mysteryShip.score);
     }
 
 }

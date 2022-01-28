@@ -20,25 +20,25 @@ public class MysteryShip : MonoBehaviour
         Vector3 rightEdge = Camera.main.ViewportToWorldPoint(Vector3.right);
 
         // Offset the destination by a unit so the ship is fully out of sight
-        Vector3 left = this.transform.position;
+        Vector3 left = transform.position;
         left.x = leftEdge.x - 1.0f;
-        this.leftDestination = left;
+        leftDestination = left;
 
-        Vector3 right = this.transform.position;
+        Vector3 right = transform.position;
         right.x = rightEdge.x + 1.0f;
-        this.rightDestination = right;
+        rightDestination = right;
 
-        this.transform.position = this.leftDestination;
+        transform.position = leftDestination;
         Despawn();
     }
 
     private void Update()
     {
-        if (!this.spawned) {
+        if (!spawned) {
             return;
         }
 
-        if (this.direction == 1) {
+        if (direction == 1) {
             MoveRight();
         } else {
             MoveLeft();
@@ -47,46 +47,46 @@ public class MysteryShip : MonoBehaviour
 
     private void MoveRight()
     {
-        this.transform.position += Vector3.right * this.speed * Time.deltaTime;
+        transform.position += Vector3.right * speed * Time.deltaTime;
 
-        if (this.transform.position.x >= this.rightDestination.x) {
+        if (transform.position.x >= rightDestination.x) {
             Despawn();
         }
     }
 
     private void MoveLeft()
     {
-        this.transform.position += Vector3.left * this.speed * Time.deltaTime;
+        transform.position += Vector3.left * speed * Time.deltaTime;
 
-        if (this.transform.position.x <= this.leftDestination.x) {
+        if (transform.position.x <= leftDestination.x) {
             Despawn();
         }
     }
 
     private void Spawn()
     {
-        this.direction *= -1;
+        direction *= -1;
 
-        if (this.direction == 1) {
-            this.transform.position = this.leftDestination;
+        if (direction == 1) {
+            transform.position = leftDestination;
         } else {
-            this.transform.position = this.rightDestination;
+            transform.position = rightDestination;
         }
 
-        this.spawned = true;
+        spawned = true;
     }
 
     private void Despawn()
     {
-        this.spawned = false;
+        spawned = false;
 
-        if (this.direction == 1) {
-            this.transform.position = this.rightDestination;
+        if (direction == 1) {
+            transform.position = rightDestination;
         } else {
-            this.transform.position = this.leftDestination;
+            transform.position = leftDestination;
         }
 
-        Invoke(nameof(Spawn), this.cycleTime);
+        Invoke(nameof(Spawn), cycleTime);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -95,8 +95,8 @@ public class MysteryShip : MonoBehaviour
         {
             Despawn();
 
-            if (this.killed != null) {
-                this.killed.Invoke(this);
+            if (killed != null) {
+                killed.Invoke(this);
             }
         }
     }

@@ -10,27 +10,27 @@ public class Projectile : MonoBehaviour
 
     private void Awake()
     {
-        this.collider = GetComponent<BoxCollider2D>();
+        collider = GetComponent<BoxCollider2D>();
     }
 
     private void OnDestroy()
     {
-        if (this.destroyed != null) {
-            this.destroyed.Invoke(this);
+        if (destroyed != null) {
+            destroyed.Invoke(this);
         }
     }
 
     private void Update()
     {
-        this.transform.position += this.direction * this.speed * Time.deltaTime;
+        transform.position += direction * speed * Time.deltaTime;
     }
 
     private void CheckCollision(Collider2D other)
     {
         Bunker bunker = other.gameObject.GetComponent<Bunker>();
 
-        if (bunker == null || bunker.CheckCollision(this.collider, this.transform.position)) {
-            Destroy(this.gameObject);
+        if (bunker == null || bunker.CheckCollision(collider, transform.position)) {
+            Destroy(gameObject);
         }
     }
 
