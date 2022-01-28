@@ -5,7 +5,7 @@ public class Invader : MonoBehaviour
 {
     public SpriteRenderer spriteRenderer { get; private set; }
     public Sprite[] animationSprites = new Sprite[0];
-    public float animationTime = 1.0f;
+    public float animationTime = 1f;
     public int animationFrame { get; private set; }
     public int score = 10;
     public System.Action<Invader> killed;

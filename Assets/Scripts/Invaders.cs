@@ -20,7 +20,7 @@ public class Invaders : MonoBehaviour
 
     [Header("Missiles")]
     public Projectile missilePrefab;
-    public float missileSpawnRate = 1.0f;
+    public float missileSpawnRate = 1f;
 
     private void Awake()
     {
@@ -29,11 +29,11 @@ public class Invaders : MonoBehaviour
         // Form the grid of invaders
         for (int i = 0; i < rows; i++)
         {
-            float width = 2.0f * (columns - 1);
-            float height = 2.0f * (rows - 1);
+            float width = 2f * (columns - 1);
+            float height = 2f * (rows - 1);
 
             Vector2 centerOffset = new Vector2(-width * 0.5f, -height * 0.5f);
-            Vector3 rowPosition = new Vector3(centerOffset.x, (2.0f * i) + centerOffset.y, 0.0f);
+            Vector3 rowPosition = new Vector3(centerOffset.x, (2f * i) + centerOffset.y, 0f);
 
             for (int j = 0; j < columns; j++)
             {
@@ -43,7 +43,7 @@ public class Invaders : MonoBehaviour
 
                 // Calculate and set the position of the invader in the row
                 Vector3 position = rowPosition;
-                position.x += 2.0f * j;
+                position.x += 2f * j;
                 invader.transform.localPosition = position;
             }
         }
@@ -72,7 +72,7 @@ public class Invaders : MonoBehaviour
 
             // Random chance to spawn a missile based upon how many invaders are
             // alive (the more invaders alive the lower the chance)
-            if (Random.value < (1.0f / (float)amountAlive))
+            if (Random.value < (1f / (float)amountAlive))
             {
                 Instantiate(missilePrefab, invader.position, Quaternion.identity);
                 break;
@@ -101,12 +101,12 @@ public class Invaders : MonoBehaviour
             }
 
             // Check the left edge or right edge based on the current direction
-            if (direction == Vector3.right && invader.position.x >= (rightEdge.x - 1.0f))
+            if (direction == Vector3.right && invader.position.x >= (rightEdge.x - 1f))
             {
                 AdvanceRow();
                 break;
             }
-            else if (direction == Vector3.left && invader.position.x <= (leftEdge.x + 1.0f))
+            else if (direction == Vector3.left && invader.position.x <= (leftEdge.x + 1f))
             {
                 AdvanceRow();
                 break;
@@ -117,11 +117,11 @@ public class Invaders : MonoBehaviour
     private void AdvanceRow()
     {
         // Flip the direction the invaders are moving
-        direction = new Vector3(-direction.x, 0.0f, 0.0f);
+        direction = new Vector3(-direction.x, 0f, 0f);
 
         // Move the entire grid of invaders down a row
         Vector3 position = transform.position;
-        position.y -= 1.0f;
+        position.y -= 1f;
         transform.position = position;
     }
 

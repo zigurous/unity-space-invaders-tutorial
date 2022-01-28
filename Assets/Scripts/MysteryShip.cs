@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class MysteryShip : MonoBehaviour
 {
-    public float speed = 5.0f;
-    public float cycleTime = 30.0f;
+    public float speed = 5f;
+    public float cycleTime = 30f;
     public int score = 300;
     public System.Action<MysteryShip> killed;
 
@@ -21,11 +21,11 @@ public class MysteryShip : MonoBehaviour
 
         // Offset the destination by a unit so the ship is fully out of sight
         Vector3 left = transform.position;
-        left.x = leftEdge.x - 1.0f;
+        left.x = leftEdge.x - 1f;
         leftDestination = left;
 
         Vector3 right = transform.position;
-        right.x = rightEdge.x + 1.0f;
+        right.x = rightEdge.x + 1f;
         rightDestination = right;
 
         transform.position = leftDestination;

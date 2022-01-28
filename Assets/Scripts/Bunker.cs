@@ -57,7 +57,7 @@ public class Bunker : MonoBehaviour
         py = (int)((localPoint.y / collider.size.y) * texture.height);
 
         // Return true if the pixel is not empty (not transparent)
-        return texture.GetPixel(px, py).a != 0.0f;
+        return texture.GetPixel(px, py).a != 0f;
     }
 
     public bool Splat(Vector3 hitPoint)

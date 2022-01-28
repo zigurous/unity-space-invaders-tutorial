@@ -63,7 +63,7 @@ public sealed class GameManager : MonoBehaviour
     private void Respawn()
     {
         Vector3 position = player.transform.position;
-        position.x = 0.0f;
+        position.x = 0f;
         player.transform.position = position;
         player.gameObject.SetActive(true);
     }
@@ -93,7 +93,7 @@ public sealed class GameManager : MonoBehaviour
         player.gameObject.SetActive(false);
 
         if (lives > 0) {
-            Invoke(nameof(NewRound), 1.0f);
+            Invoke(nameof(NewRound), 1f);
         } else {
             GameOver();
         }

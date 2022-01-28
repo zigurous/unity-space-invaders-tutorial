@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public float speed = 5.0f;
+    public float speed = 5f;
     public Projectile laserPrefab;
     public System.Action killed;
     public bool laserActive { get; private set; }
