@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 33052392596605684}
   - component: {fileID: 33052392596605687}
   - component: {fileID: 33052392596605686}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: Laser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49,7 +49,6 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
