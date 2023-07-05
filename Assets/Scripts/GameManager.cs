@@ -3,31 +3,36 @@ using UnityEngine.UI;
 
 public sealed class GameManager : MonoBehaviour
 {
+    public static GameManager Instance { get; private set; }
+
+    [SerializeField] private GameObject gameOverUI;
+    [SerializeField] private Text scoreText;
+    [SerializeField] private Text livesText;
+
     private Player player;
     private Invaders invaders;
     private MysteryShip mysteryShip;
     private Bunker[] bunkers;
-
-    public GameObject gameOverUI;
-    public Text scoreText;
-    public Text livesText;
 
     public int score { get; private set; }
     public int lives { get; private set; }
 
     private void Awake()
     {
-        player = FindObjectOfType<Player>();
-        invaders = FindObjectOfType<Invaders>();
-        mysteryShip = FindObjectOfType<MysteryShip>();
-        bunkers = FindObjectsOfType<Bunker>();
+        if (Instance != null) {
+            DestroyImmediate(gameObject);
+        } else {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
     }
 
     private void Start()
     {
-        player.killed += OnPlayerKilled;
-        mysteryShip.killed += OnMysteryShipKilled;
-        invaders.killed += OnInvaderKilled;
+        player = FindObjectOfType<Player>();
+        invaders = FindObjectOfType<Invaders>();
+        mysteryShip = FindObjectOfType<MysteryShip>();
+        bunkers = FindObjectsOfType<Bunker>();
 
         NewGame();
     }
@@ -83,10 +88,10 @@ public sealed class GameManager : MonoBehaviour
     private void SetLives(int lives)
     {
         this.lives = Mathf.Max(lives, 0);
-        livesText.text = lives.ToString();
+        livesText.text = this.lives.ToString();
     }
 
-    private void OnPlayerKilled()
+    public void OnPlayerKilled(Player player)
     {
         SetLives(lives - 1);
 
@@ -99,18 +104,30 @@ public sealed class GameManager : MonoBehaviour
         }
     }
 
-    private void OnInvaderKilled(Invader invader)
+    public void OnInvaderKilled(Invader invader)
     {
+        invader.gameObject.SetActive(false);
+
         SetScore(score + invader.score);
 
-        if (invaders.AmountKilled == invaders.TotalAmount) {
+        if (invaders.GetAliveCount() == 0) {
             NewRound();
         }
     }
 
-    private void OnMysteryShipKilled(MysteryShip mysteryShip)
+    public void OnMysteryShipKilled(MysteryShip mysteryShip)
     {
         SetScore(score + mysteryShip.score);
+    }
+
+    public void OnBoundaryReached()
+    {
+        if (invaders.gameObject.activeSelf)
+        {
+            invaders.gameObject.SetActive(false);
+
+            OnPlayerKilled(player);
+        }
     }
 
 }

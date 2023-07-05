@@ -7,12 +7,6 @@ public class Invaders : MonoBehaviour
     public AnimationCurve speed = new AnimationCurve();
     public Vector3 direction { get; private set; } = Vector3.right;
     public Vector3 initialPosition { get; private set; }
-    public System.Action<Invader> killed;
-
-    public int AmountKilled { get; private set; }
-    public int AmountAlive => TotalAmount - AmountKilled;
-    public int TotalAmount => rows * columns;
-    public float PercentKilled => (float)AmountKilled / (float)TotalAmount;
 
     [Header("Grid")]
     public int rows = 5;
@@ -26,7 +20,11 @@ public class Invaders : MonoBehaviour
     {
         initialPosition = transform.position;
 
-        // Form the grid of invaders
+        CreateInvaderGrid();
+    }
+
+    private void CreateInvaderGrid()
+    {
         for (int i = 0; i < rows; i++)
         {
             float width = 2f * (columns - 1);
@@ -37,9 +35,8 @@ public class Invaders : MonoBehaviour
 
             for (int j = 0; j < columns; j++)
             {
-                // Create an invader and parent it to this transform
+                // Create a new invader and parent it to this transform
                 Invader invader = Instantiate(prefabs[i], transform);
-                invader.killed += OnInvaderKilled;
 
                 // Calculate and set the position of the invader in the row
                 Vector3 position = rowPosition;
@@ -56,7 +53,7 @@ public class Invaders : MonoBehaviour
 
     private void MissileAttack()
     {
-        int amountAlive = AmountAlive;
+        int amountAlive = GetAliveCount();
 
         // No missiles should spawn when no invaders are alive
         if (amountAlive == 0) {
@@ -82,8 +79,14 @@ public class Invaders : MonoBehaviour
 
     private void Update()
     {
+        // Calculate the percentage of invaders killed
+        int totalCount = rows * columns;
+        int amountAlive = GetAliveCount();
+        int amountKilled = totalCount - amountAlive;
+        float percentKilled = (float)amountKilled / (float)totalCount;
+
         // Evaluate the speed of the invaders based on how many have been killed
-        float speed = this.speed.Evaluate(PercentKilled);
+        float speed = this.speed.Evaluate(percentKilled);
         transform.position += direction * speed * Time.deltaTime;
 
         // Transform the viewport to world coordinates so we can check when the
@@ -125,22 +128,28 @@ public class Invaders : MonoBehaviour
         transform.position = position;
     }
 
-    private void OnInvaderKilled(Invader invader)
-    {
-        invader.gameObject.SetActive(false);
-        AmountKilled++;
-        killed(invader);
-    }
-
     public void ResetInvaders()
     {
-        AmountKilled = 0;
         direction = Vector3.right;
         transform.position = initialPosition;
 
         foreach (Transform invader in transform) {
             invader.gameObject.SetActive(true);
         }
+    }
+
+    public int GetAliveCount()
+    {
+        int count = 0;
+
+        foreach (Transform invader in transform)
+        {
+            if (invader.gameObject.activeSelf) {
+                count++;
+            }
+        }
+
+        return count;
     }
 
 }

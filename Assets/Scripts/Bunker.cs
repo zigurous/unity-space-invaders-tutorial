@@ -40,27 +40,20 @@ public class Bunker : MonoBehaviour
         spriteRenderer.sprite = sprite;
     }
 
-    public bool CheckPoint(Vector3 hitPoint, out int px, out int py)
+    public bool CheckCollision(BoxCollider2D other, Vector3 hitPoint)
     {
-        // Transform the point from world space to local space
-        Vector3 localPoint = transform.InverseTransformPoint(hitPoint);
+        Vector2 offset = other.size / 2;
 
-        // Offset the point to the corner of the object instead of the center so
-        // we can transform to uv coordinates
-        localPoint.x += collider.size.x / 2;
-        localPoint.y += collider.size.y / 2;
-
-        Texture2D texture = spriteRenderer.sprite.texture;
-
-        // Transform the point from local space to uv coordinates
-        px = (int)((localPoint.x / collider.size.x) * texture.width);
-        py = (int)((localPoint.y / collider.size.y) * texture.height);
-
-        // Return true if the pixel is not empty (not transparent)
-        return texture.GetPixel(px, py).a != 0f;
+        // Check the hit point and each edge of the colliding object to see if
+        // it splats with the bunker for more accurate collision detection
+        return Splat(hitPoint) ||
+               Splat(hitPoint + (Vector3.down * offset.y)) ||
+               Splat(hitPoint + (Vector3.up * offset.y)) ||
+               Splat(hitPoint + (Vector3.left * offset.x)) ||
+               Splat(hitPoint + (Vector3.right * offset.x));
     }
 
-    public bool Splat(Vector3 hitPoint)
+    private bool Splat(Vector3 hitPoint)
     {
         int px;
         int py;
@@ -104,17 +97,24 @@ public class Bunker : MonoBehaviour
         return true;
     }
 
-    public bool CheckCollision(BoxCollider2D other, Vector3 hitPoint)
+    private bool CheckPoint(Vector3 hitPoint, out int px, out int py)
     {
-        Vector2 offset = other.size / 2;
+        // Transform the point from world space to local space
+        Vector3 localPoint = transform.InverseTransformPoint(hitPoint);
 
-        // Check the hit point and each edge of the colliding object to see if
-        // it splats with the bunker for more accurate collision detection
-        return Splat(hitPoint) ||
-               Splat(hitPoint + (Vector3.down * offset.y)) ||
-               Splat(hitPoint + (Vector3.up * offset.y)) ||
-               Splat(hitPoint + (Vector3.left * offset.x)) ||
-               Splat(hitPoint + (Vector3.right * offset.x));
+        // Offset the point to the corner of the object instead of the center so
+        // we can transform to uv coordinates
+        localPoint.x += collider.size.x / 2;
+        localPoint.y += collider.size.y / 2;
+
+        Texture2D texture = spriteRenderer.sprite.texture;
+
+        // Transform the point from local space to uv coordinates
+        px = (int)((localPoint.x / collider.size.x) * texture.width);
+        py = (int)((localPoint.y / collider.size.y) * texture.height);
+
+        // Return true if the pixel is not empty (not transparent)
+        return texture.GetPixel(px, py).a != 0f;
     }
 
     private void OnTriggerEnter2D(Collider2D other)

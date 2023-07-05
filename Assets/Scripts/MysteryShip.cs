@@ -1,14 +1,14 @@
 using UnityEngine;
 
+[RequireComponent(typeof(BoxCollider2D))]
 public class MysteryShip : MonoBehaviour
 {
     public float speed = 5f;
     public float cycleTime = 30f;
     public int score = 300;
-    public System.Action<MysteryShip> killed;
 
-    public Vector3 leftDestination { get; private set; }
-    public Vector3 rightDestination { get; private set; }
+    public Vector2 leftDestination { get; private set; }
+    public Vector2 rightDestination { get; private set; }
     public int direction { get; private set; } = -1;
     public bool spawned { get; private set; }
 
@@ -19,16 +19,10 @@ public class MysteryShip : MonoBehaviour
         Vector3 leftEdge = Camera.main.ViewportToWorldPoint(Vector3.zero);
         Vector3 rightEdge = Camera.main.ViewportToWorldPoint(Vector3.right);
 
-        // Offset the destination by a unit so the ship is fully out of sight
-        Vector3 left = transform.position;
-        left.x = leftEdge.x - 1f;
-        leftDestination = left;
+        // Offset each destination by 1 unit so the ship is fully out of sight
+        leftDestination = new Vector2(leftEdge.x - 1f, transform.position.y);
+        rightDestination = new Vector2(rightEdge.x + 1f, transform.position.y);
 
-        Vector3 right = transform.position;
-        right.x = rightEdge.x + 1f;
-        rightDestination = right;
-
-        transform.position = leftDestination;
         Despawn();
     }
 
@@ -94,10 +88,7 @@ public class MysteryShip : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("Laser"))
         {
             Despawn();
-
-            if (killed != null) {
-                killed.Invoke(this);
-            }
+            GameManager.Instance.OnMysteryShipKilled(this);
         }
     }
 
