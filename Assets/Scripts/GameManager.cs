@@ -14,8 +14,11 @@ public sealed class GameManager : MonoBehaviour
     private MysteryShip mysteryShip;
     private Bunker[] bunkers;
 
-    public int score { get; private set; }
-    public int lives { get; private set; }
+    private int score;
+    private int lives;
+
+    public int Score => score;
+    public int Lives => lives;
 
     private void Awake()
     {

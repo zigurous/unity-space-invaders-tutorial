@@ -5,9 +5,10 @@ using UnityEngine;
 public class Bunker : MonoBehaviour
 {
     public Texture2D splat;
-    public Texture2D originalTexture { get; private set; }
-    public SpriteRenderer spriteRenderer { get; private set; }
-    public new BoxCollider2D collider { get; private set; }
+
+    private Texture2D originalTexture;
+    private SpriteRenderer spriteRenderer;
+    private new BoxCollider2D collider;
 
     private void Awake()
     {
@@ -29,11 +30,14 @@ public class Bunker : MonoBehaviour
 
     private void CopyTexture(Texture2D source)
     {
-        Texture2D copy = new Texture2D(source.width, source.height, source.format, false);
-        copy.filterMode = source.filterMode;
-        copy.anisoLevel = source.anisoLevel;
-        copy.wrapMode = source.wrapMode;
-        copy.SetPixels(source.GetPixels());
+        Texture2D copy = new Texture2D(source.width, source.height, source.format, false)
+        {
+            filterMode = source.filterMode,
+            anisoLevel = source.anisoLevel,
+            wrapMode = source.wrapMode
+        };
+
+        copy.SetPixels32(source.GetPixels32());
         copy.Apply();
 
         Sprite sprite = Sprite.Create(copy, spriteRenderer.sprite.rect, new Vector2(0.5f, 0.5f), spriteRenderer.sprite.pixelsPerUnit);
@@ -55,11 +59,8 @@ public class Bunker : MonoBehaviour
 
     private bool Splat(Vector3 hitPoint)
     {
-        int px;
-        int py;
-
         // Only proceed if the point maps to a non-empty pixel
-        if (!CheckPoint(hitPoint, out px, out py)) {
+        if (!CheckPoint(hitPoint, out int px, out int py)) {
             return false;
         }
 
@@ -110,8 +111,8 @@ public class Bunker : MonoBehaviour
         Texture2D texture = spriteRenderer.sprite.texture;
 
         // Transform the point from local space to uv coordinates
-        px = (int)((localPoint.x / collider.size.x) * texture.width);
-        py = (int)((localPoint.y / collider.size.y) * texture.height);
+        px = (int)(localPoint.x / collider.size.x * texture.width);
+        py = (int)(localPoint.y / collider.size.y * texture.height);
 
         // Return true if the pixel is not empty (not transparent)
         return texture.GetPixel(px, py).a != 0f;

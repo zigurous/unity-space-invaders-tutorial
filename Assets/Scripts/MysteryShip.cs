@@ -7,10 +7,10 @@ public class MysteryShip : MonoBehaviour
     public float cycleTime = 30f;
     public int score = 300;
 
-    public Vector2 leftDestination { get; private set; }
-    public Vector2 rightDestination { get; private set; }
-    public int direction { get; private set; } = -1;
-    public bool spawned { get; private set; }
+    private Vector2 leftDestination;
+    private Vector2 rightDestination;
+    private int direction = -1;
+    private bool spawned;
 
     private void Start()
     {

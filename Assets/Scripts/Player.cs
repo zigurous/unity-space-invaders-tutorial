@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     public float speed = 5f;
     public Projectile laserPrefab;
+
     private Projectile laser;
 
     private void Update()

@@ -5,8 +5,9 @@ public class Invaders : MonoBehaviour
     [Header("Invaders")]
     public Invader[] prefabs = new Invader[5];
     public AnimationCurve speed = new AnimationCurve();
-    public Vector3 direction { get; private set; } = Vector3.right;
-    public Vector3 initialPosition { get; private set; }
+
+    private Vector3 direction = Vector3.right;
+    private Vector3 initialPosition;
 
     [Header("Grid")]
     public int rows = 5;
@@ -69,7 +70,7 @@ public class Invaders : MonoBehaviour
 
             // Random chance to spawn a missile based upon how many invaders are
             // alive (the more invaders alive the lower the chance)
-            if (Random.value < (1f / (float)amountAlive))
+            if (Random.value < (1f / amountAlive))
             {
                 Instantiate(missilePrefab, invader.position, Quaternion.identity);
                 break;
@@ -87,7 +88,7 @@ public class Invaders : MonoBehaviour
 
         // Evaluate the speed of the invaders based on how many have been killed
         float speed = this.speed.Evaluate(percentKilled);
-        transform.position += direction * speed * Time.deltaTime;
+        transform.position += speed * Time.deltaTime * direction;
 
         // Transform the viewport to world coordinates so we can check when the
         // invaders reach the edge of the screen

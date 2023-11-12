@@ -4,9 +4,10 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider2D))]
 public class Projectile : MonoBehaviour
 {
-    public new BoxCollider2D collider { get; private set; }
     public Vector3 direction = Vector3.up;
     public float speed = 20f;
+
+    private new BoxCollider2D collider;
 
     private void Awake()
     {
@@ -15,7 +16,7 @@ public class Projectile : MonoBehaviour
 
     private void Update()
     {
-        transform.position += direction * speed * Time.deltaTime;
+        transform.position += speed * Time.deltaTime * direction;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
