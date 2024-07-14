@@ -5,7 +5,6 @@ public class Invaders : MonoBehaviour
     [Header("Invaders")]
     public Invader[] prefabs = new Invader[5];
     public AnimationCurve speed = new AnimationCurve();
-
     private Vector3 direction = Vector3.right;
     private Vector3 initialPosition;
 
@@ -84,7 +83,7 @@ public class Invaders : MonoBehaviour
         int totalCount = rows * columns;
         int amountAlive = GetAliveCount();
         int amountKilled = totalCount - amountAlive;
-        float percentKilled = (float)amountKilled / (float)totalCount;
+        float percentKilled = amountKilled / (float)totalCount;
 
         // Evaluate the speed of the invaders based on how many have been killed
         float speed = this.speed.Evaluate(percentKilled);

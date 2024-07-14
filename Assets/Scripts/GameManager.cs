@@ -14,11 +14,8 @@ public sealed class GameManager : MonoBehaviour
     private MysteryShip mysteryShip;
     private Bunker[] bunkers;
 
-    private int score;
-    private int lives;
-
-    public int Score => score;
-    public int Lives => lives;
+    public int score { get; private set; } = 0;
+    public int lives { get; private set; } = 3;
 
     private void Awake()
     {
@@ -26,7 +23,13 @@ public sealed class GameManager : MonoBehaviour
             DestroyImmediate(gameObject);
         } else {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this) {
+            Instance = null;
         }
     }
 
@@ -128,7 +131,6 @@ public sealed class GameManager : MonoBehaviour
         if (invaders.gameObject.activeSelf)
         {
             invaders.gameObject.SetActive(false);
-
             OnPlayerKilled(player);
         }
     }

@@ -6,7 +6,6 @@ public class Player : MonoBehaviour
 {
     public float speed = 5f;
     public Projectile laserPrefab;
-
     private Projectile laser;
 
     private void Update()
@@ -16,8 +15,7 @@ public class Player : MonoBehaviour
         // Update the position of the player based on the input
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) {
             position.x -= speed * Time.deltaTime;
-        }
-        else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) {
+        } else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) {
             position.x += speed * Time.deltaTime;
         }
 

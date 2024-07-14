@@ -28,9 +28,7 @@ public class MysteryShip : MonoBehaviour
 
     private void Update()
     {
-        if (!spawned) {
-            return;
-        }
+        if (!spawned) return;
 
         if (direction == 1) {
             MoveRight();
@@ -41,7 +39,7 @@ public class MysteryShip : MonoBehaviour
 
     private void MoveRight()
     {
-        transform.position += Vector3.right * speed * Time.deltaTime;
+        transform.position += speed * Time.deltaTime * Vector3.right;
 
         if (transform.position.x >= rightDestination.x) {
             Despawn();
@@ -50,7 +48,7 @@ public class MysteryShip : MonoBehaviour
 
     private void MoveLeft()
     {
-        transform.position += Vector3.left * speed * Time.deltaTime;
+        transform.position += speed * Time.deltaTime * Vector3.left;
 
         if (transform.position.x <= leftDestination.x) {
             Despawn();

@@ -5,15 +5,14 @@ using UnityEngine;
 public class Bunker : MonoBehaviour
 {
     public Texture2D splat;
-
     private Texture2D originalTexture;
     private SpriteRenderer spriteRenderer;
-    private new BoxCollider2D collider;
+    private BoxCollider2D boxCollider;
 
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        collider = GetComponent<BoxCollider2D>();
+        boxCollider = GetComponent<BoxCollider2D>();
         originalTexture = spriteRenderer.sprite.texture;
 
         ResetBunker();
@@ -105,14 +104,14 @@ public class Bunker : MonoBehaviour
 
         // Offset the point to the corner of the object instead of the center so
         // we can transform to uv coordinates
-        localPoint.x += collider.size.x / 2;
-        localPoint.y += collider.size.y / 2;
+        localPoint.x += boxCollider.size.x / 2;
+        localPoint.y += boxCollider.size.y / 2;
 
         Texture2D texture = spriteRenderer.sprite.texture;
 
         // Transform the point from local space to uv coordinates
-        px = (int)(localPoint.x / collider.size.x * texture.width);
-        py = (int)(localPoint.y / collider.size.y * texture.height);
+        px = (int)(localPoint.x / boxCollider.size.x * texture.width);
+        py = (int)(localPoint.y / boxCollider.size.y * texture.height);
 
         // Return true if the pixel is not empty (not transparent)
         return texture.GetPixel(px, py).a != 0f;
